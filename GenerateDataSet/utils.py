@@ -23,10 +23,16 @@ def normalize(x):
     return (x - min_in) / (max_in - min_in + 1e-8)
 
 
-def read_nii(path_file: str) -> np.array:
+def read_nii(path_file: str, binary: bool = False) -> np.array:
     """Прочитать файл .nii и преобразовать в массив """
     images = sitk.ReadImage(path_file)
     images_array = sitk.GetArrayFromImage(images)
+    if binary:
+        for i in range(len(images_array)):
+            (thresh, image) = cv2.threshold(images_array[i], 0, 255, cv2.THRESH_BINARY)
+
+            images_array[i, ...] = image
+
     return images_array
 
 
@@ -35,13 +41,13 @@ def save_image_for_folder(path_save: str, list_images: list[str], list_masks: li
     save_number = 0
     for i in range(len(list_images)):
         image = read_nii(list_images[i])
-        mask = read_nii(list_masks[i])
+        mask = read_nii(list_masks[i], binary=True)
         print(list_images[i])
         time.sleep(1)
         for j in tqdm(range(len(image))):
             if (np.count_nonzero(mask[j])>0):
                 cv2.imwrite(os.path.join(path_save, f'images\\{save_number}_img.jpg'), normalize(image[j])*255)
-                cv2.imwrite(os.path.join(path_save, f'masks\\{save_number}_mask.jpg'), normalize(mask[j])*255)
+                cv2.imwrite(os.path.join(path_save, f'masks\\{save_number}_mask.jpg'), mask[j])
                 save_number+=1
 
 
