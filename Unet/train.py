@@ -104,7 +104,7 @@ def dice_coef_loss(y_true, y_pred, smooth = 10e-6):
 model = build_model()
 opt = tf.keras.optimizers.Adam(lr)
 metrics = ["acc", iou]
-model.compile(loss=dice_coef_loss, optimizer=opt, metrics=metrics)
+model.compile(loss="binary_crossentropy", optimizer=opt, metrics=metrics)
 
 
 
