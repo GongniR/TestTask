@@ -43,6 +43,7 @@
       6. Изменить кол-во фильтров в архитектуре U-net
       
   **в) Представление результата. Наличие Flask API или другого web-сервинга модели.**
+      
       Платформа для просмотра:
       ![Image alt](https://github.com/GongniR/TestTask/blob/main/image/Web%20Image.png)
       
